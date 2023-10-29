@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,12 +42,6 @@ public class ManangerItem : MonoBehaviour
         HandlingJson();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void HandlingJson()
     {
         for (int i = 0; i < itemBtn.Count; i++) // add Onclick vao button
@@ -65,15 +58,14 @@ public class ManangerItem : MonoBehaviour
         {
             price[i].text = myItem.item.items[i].price.ToString();
             title[i].text = myItem.item.items[i].title;
-            imageItemList[i].sprite =(Sprite) spItem[i];
+            imageItemList[i].sprite = (Sprite)spItem[i];
         }
     }
-
 
     public void ShowItem(int n)
     {
         ShowDetail.SetActive(true);
-        imageItem.sprite =(Sprite) spItem[n];
+        imageItem.sprite = (Sprite)spItem[n];
         nameItem.text = myItem.item.items[n].title;
         Profile.text = myItem.item.items[n].desc;
     }
