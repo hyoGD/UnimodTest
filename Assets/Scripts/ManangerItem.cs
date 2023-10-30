@@ -1,72 +1,105 @@
-﻿using System.Collections.Generic;
+﻿using SuperScrollView;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ManangerItem : MonoBehaviour
 {
     public Item myItem;
-    public GameObject ShelfPrefab;
+    public Items ShelfPrefab;
     public GameObject shelfParent;
-    public GameObject ShowDetail;
-    public List<Text> title;
-    public List<Text> price;
-    public List<Image> imageItemList;
+    public LoopListView2 mLoopListView;
     public Object[] spItem;
-    public List<Button> itemBtn;
-
+    List<items> mItems = new List<items>();
+    [Space(10)]
+    [Header("Popup Infor Item")]
+    public GameObject ShowDetail;
     public Text nameItem;
     public Text Profile;
     public Image imageItem;
-
-    private GameObject newShelf;
-    private int number = 333;
-
+    const int mItemCountPerRow = 3;
+    private int _totalCount => myItem.item.items.Length;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < number; i++)
-        {
-            newShelf = Instantiate(ShelfPrefab, shelfParent.transform);
-
-            int number = newShelf.transform.childCount;
-            for (int j = 0; j < number; j++)
-            {
-                price.Add(newShelf.transform.GetChild(j).transform.GetChild(2).GetComponent<Text>());   // tìm đến vị trí của giá tiền của item và add vào list price
-                title.Add(newShelf.transform.GetChild(j).transform.GetChild(1).GetComponent<Text>());   // tìm đến vị trí của tên item  và add vào list title
-                imageItemList.Add(newShelf.transform.GetChild(j).transform.GetChild(0).GetComponent<Image>());  //tìm đến vị trí của image item và add vào list imageItemList
-                itemBtn.Add(newShelf.transform.GetChild(j).GetComponent<Button>());                     //add tất cả button con của gameObjec trong prefab vào list itemBtn
-            }
-        }
-
-        HandlingJson();
-    }
-
-    void HandlingJson()
-    {
-        for (int i = 0; i < itemBtn.Count; i++) // add Onclick vao button
-        {
-            int levelItem = i;
-            itemBtn[i].onClick.AddListener(() => ShowItem(levelItem));
-        }
-
         string texPath = "ShopItems"; // tim kiem duong dan den sprite
         spItem = Resources.LoadAll(texPath, typeof(Sprite));
 
-
-        for (int i = 0; i < spItem.Length; i++)     //show item
+        // int tmp = 0;
+        for (int i = 0; i < _totalCount; i++)
         {
-            price[i].text = myItem.item.items[i].price.ToString();
-            title[i].text = myItem.item.items[i].title;
-            imageItemList[i].sprite = (Sprite)spItem[i];
+            //  Items item = Instantiate(ShelfPrefab, shelfParent.transform);
+            //List<items> datas = new List<items>();
+            //List<Sprite> sprites = new List<Sprite>();
+            //for (int j = tmp; j < tmp + 3; j++)
+            //{
+            // Debug.Log(tmp);
+            items dataItem = new items(myItem.item.items[i].id, myItem.item.items[i].title, myItem.item.items[i].desc, myItem.item.items[i].price);
+            mItems.Add(dataItem);
+            //datas.Add(dataItem);
+            //sprites.Add((Sprite)spItem[j]);
+            // }
+            //  item.Init(datas, sprites);
+            //foreach (var n in item._items)
+            //{
+            //    n.GetButton().onClick.AddListener(() =>
+            //    {
+            //        ShowItem(n);
+            //    });
+            //}
+            //tmp += 3;
         }
+
+
+        int count = _totalCount / mItemCountPerRow;
+        if (_totalCount % mItemCountPerRow > 0)
+        {
+            count++;
+        }
+        mLoopListView.InitListView(count, OnGetItemByIndex);
     }
 
-    public void ShowItem(int n)
+    public void ShowItem(Item1 item)
     {
         ShowDetail.SetActive(true);
-        imageItem.sprite = (Sprite)spItem[n];
-        nameItem.text = myItem.item.items[n].title;
-        Profile.text = myItem.item.items[n].desc;
+        imageItem.sprite = item.GetAvar();
+        nameItem.text = item.Data.title;
+        Profile.text = item.Data.desc;
+    }
+
+    LoopListViewItem2 OnGetItemByIndex(LoopListView2 listView, int index)
+    {
+        if (index < 0)
+        {
+            return null;
+        }
+        LoopListViewItem2 item = listView.NewListViewItem("Items");
+        Items itemScript = item.GetComponent<Items>();
+        if (item.IsInitHandlerCalled == false)
+        {
+            item.IsInitHandlerCalled = true;
+            //   itemScript.Init();
+        }
+        for (int i = 0; i < mItemCountPerRow; ++i)
+        {
+            int itemIndex = index * mItemCountPerRow + i;
+            if (itemIndex >= _totalCount)
+            {
+                itemScript._items[i].gameObject.SetActive(false);
+                continue;
+            }
+            items itemData = mItems[itemIndex];
+            if (itemData != null)
+            {
+                itemScript._items[i].gameObject.SetActive(true);
+                itemScript._items[i].Init(itemData, (Sprite)spItem[itemIndex]);
+            }
+            else
+            {
+                itemScript._items[i].gameObject.SetActive(false);
+            }
+        }
+        return item;
     }
 }

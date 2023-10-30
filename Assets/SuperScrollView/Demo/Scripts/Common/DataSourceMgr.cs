@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace SuperScrollView
 {
-
+    [System.Serializable]
     public class ItemData
     {
         public int mId;
@@ -70,7 +69,7 @@ namespace SuperScrollView
             int count = mItemDataList.Count;
             for (int i = 0; i < count; ++i)
             {
-                if(mItemDataList[i].mId == itemId)
+                if (mItemDataList[i].mId == itemId)
                 {
                     return mItemDataList[i];
                 }
@@ -93,7 +92,7 @@ namespace SuperScrollView
             mIsWaittingRefreshData = true;
         }
 
-        public void RequestLoadMoreDataList(int loadCount,System.Action onLoadMoreFinished)
+        public void RequestLoadMoreDataList(int loadCount, System.Action onLoadMoreFinished)
         {
             mLoadMoreCount = loadCount;
             mDataLoadLeftTime = 1;
@@ -138,7 +137,7 @@ namespace SuperScrollView
             DoRefreshDataSource();
         }
 
-        public void ExchangeData(int index1,int index2)
+        public void ExchangeData(int index1, int index2)
         {
             ItemData tData1 = mItemDataList[index1];
             ItemData tData2 = mItemDataList[index2];
@@ -151,9 +150,9 @@ namespace SuperScrollView
             mItemDataList.RemoveAt(index);
         }
 
-        public void InsertData(int index,ItemData data)
+        public void InsertData(int index, ItemData data)
         {
-            mItemDataList.Insert(index,data);
+            mItemDataList.Insert(index, data);
         }
 
         void DoRefreshDataSource()
