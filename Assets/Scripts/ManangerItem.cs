@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ManangerItem : MonoBehaviour
 {
+    public static ManangerItem Instance;
     public Item myItem;
     public Items ShelfPrefab;
     public GameObject shelfParent;
@@ -19,6 +20,11 @@ public class ManangerItem : MonoBehaviour
     public Image imageItem;
     const int mItemCountPerRow = 3;
     private int _totalCount => myItem.item.items.Length;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -79,7 +85,7 @@ public class ManangerItem : MonoBehaviour
         if (item.IsInitHandlerCalled == false)
         {
             item.IsInitHandlerCalled = true;
-            //   itemScript.Init();
+            itemScript.Init();
         }
         for (int i = 0; i < mItemCountPerRow; ++i)
         {
@@ -93,7 +99,7 @@ public class ManangerItem : MonoBehaviour
             if (itemData != null)
             {
                 itemScript._items[i].gameObject.SetActive(true);
-                itemScript._items[i].Init(itemData, (Sprite)spItem[itemIndex]);
+                itemScript._items[i].SetItem(itemData, (Sprite)spItem[itemIndex]);
             }
             else
             {
