@@ -29,35 +29,28 @@ public class ManangerItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InitData();
+
+        SpwanItem();
+
+        CreateFpsDisplyObj();
+    }
+
+    private void InitData()
+    {
         string texPath = "ShopItems"; // tim kiem duong dan den sprite
         spItem = Resources.LoadAll(texPath, typeof(Sprite));
 
-        // int tmp = 0;
         for (int i = 0; i < _totalCount; i++)
         {
-            //  Items item = Instantiate(ShelfPrefab, shelfParent.transform);
-            //List<items> datas = new List<items>();
-            //List<Sprite> sprites = new List<Sprite>();
-            //for (int j = tmp; j < tmp + 3; j++)
-            //{
-            // Debug.Log(tmp);
             items dataItem = new items(myItem.item.items[i].id, myItem.item.items[i].title, myItem.item.items[i].desc, myItem.item.items[i].price);
             mItems.Add(dataItem);
-            //datas.Add(dataItem);
-            //sprites.Add((Sprite)spItem[j]);
-            // }
-            //  item.Init(datas, sprites);
-            //foreach (var n in item._items)
-            //{
-            //    n.GetButton().onClick.AddListener(() =>
-            //    {
-            //        ShowItem(n);
-            //    });
-            //}
-            //tmp += 3;
+
         }
+    }
 
-
+    private void SpwanItem()
+    {
         int count = _totalCount / mItemCountPerRow;
         if (_totalCount % mItemCountPerRow > 0)
         {
@@ -107,5 +100,17 @@ public class ManangerItem : MonoBehaviour
             }
         }
         return item;
+    }
+    private void CreateFpsDisplyObj()
+    {
+        FPSDisplay fpsObj = FindObjectOfType<FPSDisplay>();
+        if (fpsObj != null)
+        {
+            return;
+        }
+        GameObject go = new GameObject();
+        go.name = "FPSDisplay";
+        go.AddComponent<FPSDisplay>();
+        DontDestroyOnLoad(go);
     }
 }

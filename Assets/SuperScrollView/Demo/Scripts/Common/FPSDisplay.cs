@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace SuperScrollView
 {
@@ -14,7 +13,7 @@ namespace SuperScrollView
             mStyle = new GUIStyle();
             mStyle.alignment = TextAnchor.UpperLeft;
             mStyle.normal.background = null;
-            mStyle.fontSize = 25;
+            mStyle.fontSize = 40;
             mStyle.normal.textColor = new Color(0f, 1f, 0f, 1.0f);
         }
 
