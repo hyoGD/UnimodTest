@@ -24,6 +24,9 @@ public class ManangerItem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+#if !UNITY_EDITOR
+        Application.targetFrameRate = 60;
+#endif
     }
 
     // Start is called before the first frame update
